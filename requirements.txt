@@ -4,3 +4,4 @@ python-dotenv
 ultralytics
 seaborn
 rich
+matplotlib

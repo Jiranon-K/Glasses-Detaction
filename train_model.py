@@ -124,6 +124,7 @@ if __name__ == "__main__":
         "workers": WORKERS,
         "exist_ok": True,
         "verbose": True,
+        "plots": True,
     }
 
     model = YOLO("yolov8n.pt")
