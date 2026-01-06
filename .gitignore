@@ -1,0 +1,30 @@
+# Environment variables
+.env
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE Settings
+.idea/
+.vscode/
+*.swp
+
+# YOLO / Machine Learning Outputs
+runs/
+
+# Dataset
+# train/
+# test/
+# valid/
+# data.yaml
+
+# OS generated files
+.DS_Store
+Thumbs.db

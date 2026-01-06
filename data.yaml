@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 1
+names: ['glasses - v1 2026-01-05']
+
+roboflow:
+  workspace: lai-1hokb
+  project: glasses-4ptht
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/lai-1hokb/glasses-4ptht/dataset/1
