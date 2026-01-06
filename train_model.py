@@ -2,6 +2,11 @@ import sys
 import os
 import time
 from ultralytics import YOLO
+import glob
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # --- Configuration ---
 PROJECT_NAME = "glassesyolov8n_50e"
@@ -170,3 +175,51 @@ if __name__ == "__main__":
             print(f"Export completed: {success}")
     except Exception as e:
         print(f"Export functionality encountered an error: {e}")
+
+    # --- Force Correlogram Generation ---
+    print("\n" + "=" * 50)
+    print("Generating labels_correlogram.jpg manually...")
+    print("=" * 50 + "\n")
+
+    try:
+        # Define paths
+        TRAIN_LABELS_PATH = os.path.join("train", "labels")
+        SAVE_DIR = os.path.join("runs", "detect", PROJECT_NAME)
+
+        if not os.path.exists(TRAIN_LABELS_PATH):
+            print(f"Error: Labels directory not found at {TRAIN_LABELS_PATH}")
+        else:
+            # 1. Load Labels
+            label_files = glob.glob(os.path.join(TRAIN_LABELS_PATH, "*.txt"))
+            if not label_files:
+                print("No label files found.")
+            else:
+                labels_data = []
+                for lf in label_files:
+                    with open(lf, "r") as f:
+                        for line in f:
+                            parts = line.strip().split()
+                            if len(parts) >= 5:
+                                # class, x, y, w, h
+                                labels_data.append([float(x) for x in parts[:5]])
+
+                if labels_data:
+                    # 2. Plot
+                    df = pd.DataFrame(
+                        labels_data, columns=["class", "x", "y", "width", "height"]
+                    )
+                    sns.pairplot(
+                        df,
+                        corner=True,
+                        diag_kind="auto",
+                        plot_kws={"alpha": 0.5, "s": 10},
+                    )
+
+                    save_path = os.path.join(SAVE_DIR, "labels_correlogram.jpg")
+                    plt.savefig(save_path)
+                    print(f"Successfully generated: {save_path}")
+                else:
+                    print("Labels files were empty.")
+
+    except Exception as e:
+        print(f"Manual generation failed: {e}")

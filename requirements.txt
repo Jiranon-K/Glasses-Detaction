@@ -5,3 +5,4 @@ ultralytics
 seaborn
 rich
 matplotlib
+pandas

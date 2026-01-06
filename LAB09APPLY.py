@@ -19,7 +19,7 @@ class SmartDetector:
         # Configuration
         self.TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
         self.TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-        self.MODEL_PATH = "runs/detect/objyolov8n_50e/weights/best.pt"
+        self.MODEL_PATH = "runs/detect/glassesyolov8n_50e/weights/best.pt"
         self.CONFIDENCE_THRESHOLD = 0.5
         self.COOLDOWN_SECONDS = 60
 
@@ -213,6 +213,20 @@ class SmartDetector:
             )
             y_start += 40
 
+    def draw_corners(self, frame, x1, y1, x2, y2, color, thickness=2, length=20):
+        # Top-Left
+        cv2.line(frame, (x1, y1), (x1 + length, y1), color, thickness)
+        cv2.line(frame, (x1, y1), (x1, y1 + length), color, thickness)
+        # Top-Right
+        cv2.line(frame, (x2, y1), (x2 - length, y1), color, thickness)
+        cv2.line(frame, (x2, y1), (x2, y1 + length), color, thickness)
+        # Bottom-Left
+        cv2.line(frame, (x1, y2), (x1 + length, y2), color, thickness)
+        cv2.line(frame, (x1, y2), (x1, y2 - length), color, thickness)
+        # Bottom-Right
+        cv2.line(frame, (x2, y2), (x2 - length, y2), color, thickness)
+        cv2.line(frame, (x2, y2), (x2, y2 - length), color, thickness)
+
     def draw_detections(self, frame, results):
         detected_names = []
         for r in results:
@@ -224,24 +238,27 @@ class SmartDetector:
                     name = self.model.names[cls_id]
                     detected_names.append(name)
 
-                    # Draw Box
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), self.COLOR_PRIMARY, 2)
+                    # Draw Corners (instead of full box)
+                    self.draw_corners(
+                        frame,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        self.COLOR_PRIMARY,
+                        thickness=3,
+                        length=30,
+                    )
 
-                    # Draw Label
+                    # Draw Label (at bottom, minimal style)
                     label = f"{name.upper()} {conf:.0%}"
-                    (lw, lh), _ = cv2.getTextSize(
-                        label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1
-                    )
-                    cv2.rectangle(
-                        frame, (x1, y1 - 25), (x1 + lw, y1), self.COLOR_PRIMARY, -1
-                    )
                     cv2.putText(
                         frame,
                         label,
-                        (x1, y1 - 7),
+                        (x1, y2 + 20),
                         cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5,
-                        (0, 0, 0),
+                        0.6,
+                        self.COLOR_TEXT,
                         1,
                         cv2.LINE_AA,
                     )
@@ -275,15 +292,6 @@ class SmartDetector:
                     ):
                         target = detected_items[0]
                         msg = f"Detected: {target}"
-
-                        # Flash Effect
-                        cv2.rectangle(
-                            frame,
-                            (0, 0),
-                            (frame.shape[1], frame.shape[0]),
-                            self.COLOR_ALERT,
-                            10,
-                        )
 
                         self.add_toast(f"[ALERT] Sending photo...", duration=5.0)
                         self.send_notification(msg, frame)
