@@ -9,11 +9,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # --- Configuration ---
-PROJECT_NAME = "glassesyolov8n_50e"
+PROJECT_NAME = "objyolov8n_50e"
 DATA_YAML = "data.yaml"
 IMG_SIZE = 640
 EPOCHS = 50
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 WORKERS = 4
 PATIENCE = 10
 DEVICE = 0

@@ -19,7 +19,7 @@ class SmartDetector:
         # Configuration
         self.TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
         self.TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-        self.MODEL_PATH = "runs/detect/glassesyolov8n_50e/weights/best.pt"
+        self.MODEL_PATH = "runs/detect/objyolov8n_50e/weights/best.pt"
         self.CONFIDENCE_THRESHOLD = 0.5
         self.COOLDOWN_SECONDS = 60
 
@@ -291,7 +291,7 @@ class SmartDetector:
                         > self.COOLDOWN_SECONDS
                     ):
                         target = detected_items[0]
-                        msg = f"Detected: {target}"
+                        msg = f"Detection of {target}"
 
                         self.add_toast(f"[ALERT] Sending photo...", duration=5.0)
                         self.send_notification(msg, frame)
