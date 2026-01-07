@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👁️ Smart Object Detection System
+# Smart Object Detection System
 ### Real-time YOLOv8 Inference with Telegram Notifications
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
@@ -19,8 +19,29 @@
 
 -   **⚡ Real-time Detection**: Powered by YOLOv8 for high-speed, accurate object recognition.
 -   **📱 Instant Alerts**: Asynchronous Telegram notifications with snapshot images.
--   **🎨 Modern UI**: Custom-drawn overlays, toast notifications, and non-intrusive bounding boxes.
--   **🛡️ Smart Cooldown**: Prevents notification spam with intelligent timer logic.
+-   **📊 Advanced Training Dashboard**: Uses `Rich` library to display real-time training metrics, progress bars, and loss statistics in the terminal.
+-   **🔄 Auto-Export**: Automatically exports the best model to **ONNX** format after training completes.
+-   **📈 Visual Analytics**: Generates label correlograms (`labels_correlogram.jpg`) to visualize dataset statistics.
+-   **🎨 Modern UI**: Custom-drawn overlays, toast notifications (`[SUCCESS]`, `[ALERT]`), and non-intrusive corner-style bounding boxes.
+-   **🛡️ Smart Cooldown**: Prevents notification spam with intelligent timer logic (default 60s).
+
+---
+
+## 🏗️ Project Structure
+```
+.
+├── LAB09APPLY.py    # 🟢 Main Application (Real-time Detection & Telegram)
+├── train_model.py   # 🧠 Model Training (with Rich Dashboard & ONNX Export)
+├── requirements.txt # 📦 Project Dependencies
+├── data.yaml        # 📄 Dataset Configuration
+├── yolov8n.pt       # 🤖 Pre-trained YOLOv8 Model (Base)
+├── yolo11n.pt       # 🤖 Pre-trained YOLOv11 Model (Alternate)
+├── .env             # 🔑 Environment Variables (Secrets)
+├── runs/            # 📂 Training & Inference Outputs (logs, weights, plots)
+├── train/           # 📂 Training Dataset (images/labels)
+├── valid/           # 📂 Validation Dataset (images/labels)
+└── test/            # 📂 Testing Dataset (images/labels)
+```
 
 ---
 
@@ -47,8 +68,18 @@ TELEGRAM_CHAT_ID=your_chat_id_here
 
 ## 🚀 Usage
 
-### Run the Application
-Start the detection system with a single command:
+### 1. Training the Model (`train_model.py`)
+Train a custom YOLOv8 model with a beautiful terminal dashboard.
+```bash
+python train_model.py
+```
+**Key Features:**
+- **Rich Dashboard**: Live progress tracking, epoch stats, and loss metrics.
+- **Auto-Export**: Converts `best.pt` to `best.onnx` automatically.
+- **Analytics**: Forces generation of `labels_correlogram.jpg` for data distribution analysis.
+
+### 2. Running Inference (`LAB09APPLY.py`)
+Start the real-time detection system with webcam feed and Telegram alerts.
 ```bash
 python LAB09APPLY.py
 ```
@@ -56,19 +87,8 @@ python LAB09APPLY.py
 ### 🎮 Controls
 | Key | Action |
 | :---: | :--- |
-| **`q`** | Quit the application safely |
-
----
-
-## 🏗️ Project Structure
-```
-.
-├── LAB09APPLY.py    # 🟢 Main Application Entry Point
-├── train_model.py   # 🧠 Model Training Script
-├── requirements.txt # 📦 Dependencies
-├── .env             # 🔑 Secrets (Not committed)
-└── runs/            # 📂 YOLO Generated Outputs
-```
+| **`t`** | **Toggle Telegram** on/off (prevents sending alerts) |
+| **`q`** | **Quit** the application safely |
 
 ---
 
